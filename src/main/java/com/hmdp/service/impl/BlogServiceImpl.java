@@ -166,7 +166,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
                 .in("id", ids)
                 .last("ORDER BY FIELD(id," + idStr + ")")
                 .list();
-        
+
         for (Blog blog : blogs) {
             queryBlogUser(blog);
             isBlogLiked(blog);
