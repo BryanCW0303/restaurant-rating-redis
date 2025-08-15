@@ -10,15 +10,21 @@ import com.hmdp.dto.UserDTO;
 import com.hmdp.entity.User;
 import com.hmdp.mapper.UserMapper;
 import com.hmdp.service.IUserService;
+import com.hmdp.utils.RedisConstants;
 import com.hmdp.utils.RegexUtils;
+import com.hmdp.utils.UserHolder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -26,14 +32,6 @@ import java.util.concurrent.TimeUnit;
 import static com.hmdp.utils.RedisConstants.*;
 import static com.hmdp.utils.SystemConstants.USER_NICK_NAME_PREFIX;
 
-/**
- * <p>
- * 服务实现类
- * </p>
- *
- * @author 虎哥
- * @since 2021-12-22
- */
 @Slf4j
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
@@ -107,6 +105,60 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         stringRedisTemplate.expire(LOGIN_USER_KEY + token, LOGIN_USER_TTL, TimeUnit.MINUTES);
 
         return Result.ok(token);
+    }
+
+    @Override
+    public Result sign() {
+        // retrieve user information
+        Long userId = UserHolder.getUser().getId();
+        // retrieve Date information
+        LocalDateTime now = LocalDateTime.now();
+        // create a key
+        String yyyyMM = now.format(DateTimeFormatter.ofPattern("yyyyMM"));
+        String key = USER_SIGN_KEY + userId + yyyyMM;
+        // retrieve date
+        int dayOfMonth = now.getDayOfMonth();
+        // implement attendance records using Redis Bitmap
+        stringRedisTemplate.opsForValue().setBit(key, dayOfMonth - 1, true);
+        return Result.ok();
+    }
+
+    @Override
+    public Result signCount() {
+        // retrieve user information
+        Long userId = UserHolder.getUser().getId();
+        // retrieve Date information
+        LocalDateTime now = LocalDateTime.now();
+        // create a key
+        String yyyyMM = now.format(DateTimeFormatter.ofPattern("yyyyMM"));
+        String key = USER_SIGN_KEY + userId + yyyyMM;
+        // retrieve date
+        int dayOfMonth = now.getDayOfMonth();
+        // query the attendance bitmap
+        List<Long> bitField = stringRedisTemplate.opsForValue().bitField(
+                key,
+                BitFieldSubCommands.create()
+                        .get(BitFieldSubCommands.BitFieldType.unsigned(dayOfMonth)).valueAt(0)
+        );
+        if (bitField == null || bitField.isEmpty()) {
+            return Result.ok();
+        }
+        Long num = bitField.get(0);
+        if (num == null) {
+            return Result.ok();
+        }
+        // calculate consecutive check-in days
+        int cnt = 0;
+        // iteration, perform bitwise AND with 1 to retrieve the last bit
+        while (true) {
+            if ((num & 1) == 0) {
+                break;
+            } else {
+                cnt++;
+            }
+            num >>>= 1;
+        }
+        return Result.ok(cnt);
     }
 
     private User createUserWithPhone(String phone) {
