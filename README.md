@@ -22,7 +22,7 @@ It demonstrates **high-performance caching**, **distributed locking**, **asynchr
 
 ## Features Overview
 
-### 🧾 User & Authentication
+### User & Authentication
 - SMS-based login & registration flow
 - Session replacement with Redis
 - Login state auto-refresh via interceptor
