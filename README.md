@@ -6,7 +6,7 @@ It demonstrates **high-performance caching**, **distributed locking**, **asynchr
 
 ---
 
-## 🌟 Key Highlights
+## Key Highlights
 
 - **Spring Boot + MyBatis + Redis + Redisson**
 - **JWT-like token mechanism**
@@ -20,7 +20,7 @@ It demonstrates **high-performance caching**, **distributed locking**, **asynchr
 
 ---
 
-## 🧩 Features Overview
+## Features Overview
 
 ### 🧾 User & Authentication
 - SMS-based login & registration flow
@@ -29,7 +29,7 @@ It demonstrates **high-performance caching**, **distributed locking**, **asynchr
 - User info desensitization
 - Token-based authentication (`LoginInterceptor`, `RefreshTokenInterceptor`)
 
-### 🏪 Shop & Cache System
+### Shop & Cache System
 - Shop and category data caching (`RedisConstants`)
 - Logical expiration and cache rebuild strategies
 - Cache penetration / breakdown / avalanche protection
@@ -38,7 +38,7 @@ It demonstrates **high-performance caching**, **distributed locking**, **asynchr
 - Mutex lock and logical expiration solutions
 - Encapsulated `RedisUtils` helper class
 
-### 🎟️ Voucher & Flash Sale
+### Voucher & Flash Sale
 - Global unique ID generator (`RedisIdWorker`)
 - Seckill voucher implementation
 - One-person-one-order rule enforcement
@@ -55,7 +55,7 @@ It demonstrates **high-performance caching**, **distributed locking**, **asynchr
   - Stream (single consumer & consumer group)
 - Full async order flow with Stream consumer
 
-### 📸 Blog & Social Interaction
+### Blog & Social Interaction
 - Post “explore notes” and blogs
 - Like and ranking features using ZSET
 - Follower & following system
@@ -63,18 +63,18 @@ It demonstrates **high-performance caching**, **distributed locking**, **asynchr
 - Scroll pagination (rolling feed)
 - Common-follow detection
 
-### 📍 Nearby Shops & GEO
+### Nearby Shops & GEO
 - GEO data structure for storing shop coordinates
 - Search nearby shops by type and distance
 
-### 📅 User Sign-in & Statistics
+### User Sign-in & Statistics
 - Daily sign-in tracking via Bitmap
 - Continuous sign-in streak calculation
 - Unique visitor counting with HyperLogLog
 
 ---
 
-## ⚙️ Tech Stack
+## Tech Stack
 
 | Category | Technology |
 |-----------|-------------|
@@ -87,7 +87,7 @@ It demonstrates **high-performance caching**, **distributed locking**, **asynchr
 
 ---
 
-## 🧠 Redis Infrastructure
+## Redis Infrastructure
 
 - Redis cache with key conventions (`RedisConstants`)
 - Logical expiration / cache rebuild patterns
