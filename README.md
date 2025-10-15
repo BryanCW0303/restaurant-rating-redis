@@ -48,7 +48,7 @@ It demonstrates **high-performance caching**, **distributed locking**, **asynchr
 - MultiLock & WatchDog mechanism (Redisson)
 - Seckill optimization: eligibility check + async order queue
 
-### 📨 Redis Messaging & Asynchronous Processing
+### Redis Messaging & Asynchronous Processing
 - Message queue demos using:
   - List (simple queue)
   - Pub/Sub (publish-subscribe)
